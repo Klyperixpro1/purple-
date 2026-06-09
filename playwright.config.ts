@@ -11,6 +11,8 @@ export default defineConfig({
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
   },
+  snapshotPathTemplate: '{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{ext}',
+  updateSnapshots: 'missing',
   projects: [
     {
       name: 'chromium',
