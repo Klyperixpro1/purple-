@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Feedback - Klyperix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --primary: #8400ff;
+            --primary-gradient: linear-gradient(135deg, #8400ff 0%, #ab61ff 100%);
+            --text-main: #0d0d0d;
+            --text-muted: rgba(13, 13, 13, 0.6);
+            --border-color: rgba(13, 13, 13, 0.1);
+            --input-bg: rgba(13, 13, 13, 0.03);
+            --star-empty: rgba(13, 13, 13, 0.15);
+            --star-active: #f28713;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 540px;
+            animation: fadeIn 0.5s ease forwards;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        .brand-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            max-width: 400px;
+        }
+
+        .feedback-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px 32px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+            transition: border-color 0.3s ease;
+        }
+
+        .feedback-card:hover {
+            border-color: rgba(132, 0, 255, 0.2);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row > .input-group {
+            flex: 1;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group textarea {
+            background: var(--input-bg);
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: rgba(13, 13, 13, 0.4);
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(132, 0, 255, 0.1);
+        }
+
+        .input-group textarea {
+            resize: none;
+        }
+
+        .upload-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--input-bg);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .upload-row:hover {
+            border-color: var(--primary);
+            background: rgba(132, 0, 255, 0.02);
+        }
+
+        .file-upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .file-upload-btn input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn svg {
+            stroke: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .upload-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+        
+        .upload-text strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .logo-preview-container {
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #logo-preview {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(132, 0, 255, 0.2);
+            background: #fff;
+        }
+
+        .file-name {
+            font-size: 12px;
+            color: var(--text-main);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+            display: none; /* Hide to save space */
+        }
+
+        #remove-logo {
+            background: rgba(255, 77, 77, 0.1);
+            color: #ff4d4d;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .star-rating-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .star {
+            font-size: 28px;
+            color: var(--star-empty);
+            transition: color 0.2s ease, transform 0.2s ease;
+            line-height: 1;
+        }
+
+        .star:hover {
+            transform: scale(1.15);
+        }
+
+        .star.active,
+        .star.hover-active {
+            color: var(--star-active);
+            text-shadow: 0 0 10px rgba(242, 135, 19, 0.3);
+        }
+
+        #rating-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--star-active);
+        }
+
+        .submit-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(132, 0, 255, 0.25);
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(132, 0, 255, 0.35);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success State */
+        .success-card {
+            display: none;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(29, 204, 93, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .success-icon svg {
+            color: #1dcc5d;
+            width: 32px;
+            height: 32px;
+        }
+
+        .success-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .success-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--input-bg);
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .feedback-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+<style>video::-webkit-media-controls { display: none !important; } video::-webkit-media-controls-enclosure { display: none !important; } video::-webkit-media-controls-panel { display: none !important; }</style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="brand-header" id="page-header">
+            <!-- Used the exact logo image URL from Framer -->
+            <img src="https://framerusercontent.com/images/rb5aGN2as8psLSRYLsj77lIZQY.png" alt="Klyperix Logo" class="brand-logo" />
+            <h1>Submit Your Feedback</h1>
+            <p>Your feedback helps others understand the quality and results we deliver.</p>
+        </div>
+
+        <div class="feedback-card" id="form-card">
+            <form id="feedback-form">
+                
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="feedback-name" placeholder="Enter your full name" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Profession / Title</label>
+                        <input type="text" id="feedback-profession" placeholder="e.g. CEO, Content Creator" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="Enter your email address" required />
+                </div>
+
+                <div class="input-group">
+                    <label>Upload Company Logo</label>
+                    <div class="upload-row" id="upload-row">
+                        <label class="file-upload-btn" id="logo-dropzone">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <span class="upload-text">Drag & Drop or <strong>Browse</strong></span>
+                            <input type="file" id="logo-upload" accept="image/png, image/jpeg, image/jpg, image/svg+xml, image/webp" />
+                        </label>
+
+                        <div class="logo-preview-container" id="logo-preview-container">
+                            <img id="logo-preview" src="" alt="Logo Preview" />
+                            <button type="button" id="remove-logo">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="star-rating-container">
+                        <label>Your Rating</label>
+                        <div id="rating-label"></div>
+                    </div>
+                    <div class="star-rating">
+                        <span data-value="1" class="star" title="Poor">&#9733;</span>
+                        <span data-value="2" class="star" title="Fair">&#9733;</span>
+                        <span data-value="3" class="star" title="Good">&#9733;</span>
+                        <span data-value="4" class="star" title="Excellent">&#9733;</span>
+                        <span data-value="5" class="star" title="Outstanding">&#9733;</span>
+                    </div>
+                    <input type="hidden" id="rating-value" value="0" required />
+                </div>
+
+                <div class="input-group">
+                    <label>Experience / Testimonial</label>
+                    <textarea id="feedback-desc" rows="2" maxlength="150" placeholder="A brief review (max 150 chars)"></textarea>
+                    <div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 2px;">Under 150 letters</div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">Submit Feedback</button>
+                
+            </form>
+        </div>
+
+        <!-- Success Card -->
+        <div class="feedback-card success-card" id="success-card">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3>Thank You!</h3>
+            <p>Your testimonial has been received successfully.</p>
+            <div style="display: flex; gap: 12px;">
+                <button type="button" id="submit-another" class="btn-outline" style="cursor:pointer;">Submit Another</button>
+                <a href="./index_47.html" class="submit-btn" style="margin-top: 0; text-decoration: none; width: auto; display: flex; align-items: center; justify-content: center; padding: 10px 20px;">Return Home</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Star Rating Logic
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating-value');
+        const ratingLabel = document.getElementById('rating-label');
+        const labels = ["Poor", "Fair", "Good", "Excellent", "Outstanding"];
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const val = parseInt(this.getAttribute('data-value'));
+                ratingLabel.textContent = labels[val - 1];
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= val) s.classList.add('hover-active');
+                    else s.classList.remove('hover-active');
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                stars.forEach(s => s.classList.remove('hover-active'));
+                const currentVal = parseInt(ratingInput.value);
+                if (currentVal > 0) ratingLabel.textContent = labels[currentVal - 1];
+                else ratingLabel.textContent = "";
+            });
+
+            star.addEventListener('click', function() {
+                const val = parseInt(this.getAttribute('data-value'));
+                ratingInput.value = val;
+                ratingLabel.textContent = labels[val - 1];
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= val) s.classList.add('active');
+                    else s.classList.remove('active');
+                });
+            });
+        });
+
+        // File Upload Logic
+        const fileInput = document.getElementById('logo-upload');
+        const dropzone = document.getElementById('logo-dropzone');
+        const previewContainer = document.getElementById('logo-preview-container');
+        const previewImg = document.getElementById('logo-preview');
+        const removeLogoBtn = document.getElementById('remove-logo');
+        const uploadRow = document.getElementById('upload-row');
+
+        const handleFile = (file) => {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    dropzone.style.display = 'none';
+                    previewContainer.style.display = 'flex';
+                    uploadRow.style.justifyContent = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) handleFile(e.target.files[0]);
+            });
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadRow.style.borderColor = '#8400ff';
+                uploadRow.style.background = 'rgba(132, 0, 255, 0.05)';
+            });
+
+            dropzone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadRow.style.borderColor = '';
+                uploadRow.style.background = '';
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadRow.style.borderColor = '';
+                uploadRow.style.background = '';
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            removeLogoBtn.addEventListener('click', () => {
+                fileInput.value = '';
+                dropzone.style.display = 'flex';
+                previewContainer.style.display = 'none';
+                previewImg.src = '';
+                uploadRow.style.justifyContent = 'flex-start';
+            });
+        }
+
+        // Form Submission Logic
+        const form = document.getElementById('feedback-form');
+        const formCard = document.getElementById('form-card');
+        const successCard = document.getElementById('success-card');
+        const header = document.getElementById('page-header');
+        
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if(ratingInput.value === "0") {
+                    alert("Please select a star rating.");
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submit-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+
+                const payload = {
+                    category_slug: "testimonial",
+                    title: document.getElementById("feedback-name").value,
+                    description: document.getElementById("feedback-desc").value,
+                    media_url: previewImg.src.startsWith("data:") ? previewImg.src : null,
+                    metadata: {
+                        profession: document.getElementById("feedback-profession").value,
+                        rating: parseInt(ratingInput.value) || 5
+                    }
+                };
+
+                // API Call
+                fetch('/api/content/public/submit-feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(!data.success && data.detail) throw new Error(data.detail);
+                    formCard.style.display = 'none';
+                    successCard.style.display = 'flex';
+                    
+                    form.reset();
+                    ratingInput.value = 0;
+                    stars.forEach(s => s.classList.remove('active', 'hover-active'));
+                    ratingLabel.textContent = "";
+                    removeLogoBtn.click();
+                })
+                .catch(err => {
+                    alert("Error submitting: " + err.message);
+                })
+                .finally(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+            });
+        }
+
+        // Submit Another Action
+        document.getElementById('submit-another').addEventListener('click', () => {
+            successCard.style.display = 'none';
+            formCard.style.display = 'block';
+        });
+    </script>
+<style>video::-webkit-media-controls { display: none !important; } video::-webkit-media-controls-enclosure { display: none !important; } video::-webkit-media-controls-panel { display: none !important; }</style>
+<script>const observer = new MutationObserver((mutations) => { mutations.forEach(m => { if (m.type === 'childList') { m.addedNodes.forEach(node => { if (node.tagName === 'VIDEO') { node.removeAttribute('controls'); node.setAttribute('controlsList', 'nodownload noremoteplayback noplaybackrate'); node.disablePictureInPicture = true; } else if (node.querySelectorAll) { node.querySelectorAll('video').forEach(v => { v.removeAttribute('controls'); v.setAttribute('controlsList', 'nodownload noremoteplayback noplaybackrate'); v.disablePictureInPicture = true; }); } }); } else if (m.type === 'attributes' && m.target.tagName === 'VIDEO' && m.attributeName === 'controls') { m.target.removeAttribute('controls'); } }); }); observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true }); document.querySelectorAll('video').forEach(v => { v.removeAttribute('controls'); v.setAttribute('controlsList', 'nodownload noremoteplayback noplaybackrate'); v.disablePictureInPicture = true; });</script>
+</body>
+</html>
+
+

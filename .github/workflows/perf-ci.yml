@@ -1,0 +1,53 @@
+name: Performance CI
+
+on:
+  push:
+    branches:
+      - 'perf/refactor-preload'
+      - main
+  pull_request:
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install -D @playwright/test puppeteer
+          npm install -g lighthouse
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start local server
+        run: python3 -m http.server 8080 &
+        
+      - name: Wait for server to start
+        run: sleep 2
+
+      - name: Run Playwright Visual Regression
+        run: npx playwright test tests/visual.spec.ts
+
+      - name: Run Puppeteer 3G Load Test
+        run: node tests/throttle-loadtest.js
+
+      - name: Run Lighthouse
+        run: |
+          lighthouse http://localhost:8080 \
+            --preset=perf \
+            --emulated-form-factor=mobile \
+            --throttling-method=simulate \
+            --throttling.rttMs=150 \
+            --throttling.throughputKbps=1638 \
+            --throttling.cpuSlowdownMultiplier=4 \
+            --output=json \
+            --output-path=./lighthouse-report.json

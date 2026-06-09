@@ -1,0 +1,41 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Dev artifacts
+tail*.txt
+temp_*.js
+test_*.py
+test_*.js
+*.backup
+recover*.js
+clean_framer.py
+start.bat
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Agents / AI tools
+.agents/
+skills-lock.json
