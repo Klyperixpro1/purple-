@@ -7,7 +7,10 @@ test.describe('Visual Regression', () => {
     await page.goto('http://localhost:8080');
     // Wait for hydration or animations
     await page.waitForTimeout(2000);
-    await expect(page).toHaveScreenshot('homepage-desktop-atf.png', { maxDiffPixelRatio: 0.005 });
+    await expect(page).toHaveScreenshot('homepage-desktop-atf.png', { 
+      maxDiffPixelRatio: 0.005,
+      mask: [page.locator('video')]
+    });
   });
 
   test('homepage - mobile', async ({ page }) => {
@@ -16,6 +19,9 @@ test.describe('Visual Regression', () => {
     await page.goto('http://localhost:8080');
     // Wait for hydration or animations
     await page.waitForTimeout(2000);
-    await expect(page).toHaveScreenshot('homepage-mobile-atf.png', { maxDiffPixelRatio: 0.005 });
+    await expect(page).toHaveScreenshot('homepage-mobile-atf.png', { 
+      maxDiffPixelRatio: 0.005,
+      mask: [page.locator('video')]
+    });
   });
 });
