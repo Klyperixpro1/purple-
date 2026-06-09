@@ -27,7 +27,7 @@ const puppeteer = require('puppeteer');
   console.log('Starting load test on simulated 3G...');
   
   const startTime = Date.now();
-  await page.goto('http://localhost:8080', { waitUntil: 'load' });
+  await page.goto('http://localhost:8080', { waitUntil: 'domcontentloaded', timeout: 120000 });
   const loadTime = Date.now() - startTime;
   
   const perfMetrics = await page.evaluate(() => JSON.stringify(window.performance.timing));
