@@ -45,6 +45,7 @@ jobs:
           lighthouse http://localhost:8080 \
             --preset=perf \
             --emulated-form-factor=mobile \
+            --chrome-flags="--headless --no-sandbox" \
             --throttling-method=simulate \
             --throttling.rttMs=150 \
             --throttling.throughputKbps=1638 \
